@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Tasks</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>All Tasks</h1>
+        {% if data %}
+        <table>
+            <thead>
+                <tr>
+                    
+                    <th>Title</th>
+                    <th>Owner</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in data %}
+                <tr>
+                    
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.owner }}</td>
+                    <td>{{ task.created_date }}</td>
+                    <td>
+                        <form method="get" action="{% url 'update-task' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ task.id }}">
+                            <button type="submit">Update</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="POST" action="{% url 'delete-task' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ task.id }}">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No tasks found.</p>
+        {% endif %}
+        <a href="{% url 'create-task' %}">Create a Task</a>
+    </div>
+</body>
+</html>
